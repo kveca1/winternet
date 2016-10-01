@@ -43,9 +43,12 @@ function create() {
 	score2 = 0;
 	
     player = game.add.sprite(0 , 200, 'ball');//adds ball to the game
-    player.x = (GAME_WIDTH - player.width)  * .5
-
     game.physics.arcade.enable(player);
+    
+    player.x = (GAME_WIDTH - player.width)  * .5;
+    player.body.velocity.y = -200;
+
+    //game.physics.arcade.enable(player);
 
     player.body.collideWorldBounds = true;
     player.body.gravity.y = 500;
@@ -116,7 +119,7 @@ function update () {
 		player.x = (GAME_WIDTH - player.width)  * .5;
 		player.y = 200;
 		player.body.velocity.x = 0;
-		player.body.velocity.y = 0;
+		player.body.velocity.y = -200;
 	}
 	else if(goal2.contains(player.x, player.centerY))
 	{
@@ -124,7 +127,7 @@ function update () {
 		player.x = (GAME_WIDTH - player.width)  * .5;
 		player.y = 200;
 		player.body.velocity.x = 0;
-		player.body.velocity.y = 0;
+		player.body.velocity.y = -200;
 	}
 	
 	
