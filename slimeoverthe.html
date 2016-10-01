@@ -33,11 +33,17 @@ var button;
 var goal1;
 var goal2;
 
+var score1;
+var score2;
+
 function create() {
 
 	button = false;
+	score1 = 0;
+	score2 = 0;
 	
-    player = game.add.sprite((GAME_WIDTH *.5) , 200, 'ball');//adds ball to the game
+    player = game.add.sprite(0 , 200, 'ball');//adds ball to the game
+    player.x = (GAME_WIDTH - player.width)  * .5
 
     game.physics.arcade.enable(player);
 
@@ -104,7 +110,22 @@ function update () {
 		button = false;
 	}	
 	
-	
+	if(goal1.contains(player.x, player.centerY))
+	{
+		score2++;
+		player.x = (GAME_WIDTH - player.width)  * .5;
+		player.y = 200;
+		player.body.velocity.x = 0;
+		player.body.velocity.y = 0;
+	}
+	else if(goal2.contains(player.x, player.centerY))
+	{
+		score1++;
+		player.x = (GAME_WIDTH - player.width)  * .5;
+		player.y = 200;
+		player.body.velocity.x = 0;
+		player.body.velocity.y = 0;
+	}
 	
 	
 	
