@@ -41,4 +41,10 @@ io.on('connection', socket => {
   socket.on('ballChangeVY', function(data) {
 	socket.broadcast.emit('ballChangeVY',data);
   });
+  socket.on('Score1', function(data) {
+	socket.broadcast.emit('Score1', data);
+  });
+  socket.on('Score2', function(data) {
+	socket.broadcast.emit('Score2', data);
+  });
 });
