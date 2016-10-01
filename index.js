@@ -13,8 +13,14 @@ app.use(express.static(__dirname));
 
 let players = 0;
 
-io.on('connections', socket => {
-  socket.on('disconnected', () => {
-
+io.on('connection', socket =>
+{
+  socket.on('disconnected', () =>
+  {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data)
+    {
+      console.log('test');
+    });
   });
 });

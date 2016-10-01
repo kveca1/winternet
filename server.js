@@ -14,8 +14,8 @@ app.use(express.static(__dirname));
 let players = 0;
 
 io.on('connection', socket => {
-  socket.on('test', () => {
-    socket.emit('respond');
+  socket.on('mouse move', (data) => {
+    console.log(data);
   });
   socket.on('connected', () => {
     console.log('connected');
