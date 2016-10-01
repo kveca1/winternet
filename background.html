@@ -1,0 +1,91 @@
+<script type="text/javascript" src="./node_modules/phaser/build/phaser.min.js"></script>
+<script type="text/javascript">
+/**
+ * Generated from the Phaser Sandbox
+ *
+ * http://phaser.io/sandbox/rpqQRssz
+ *
+ * This source requires Phaser 2.6.2
+ */
+
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+
+function preload() {
+
+    game.stage.backgroundColor = '#000000';
+
+    game.load.baseURL = 'http://examples.phaser.io/assets/';
+    game.load.crossOrigin = 'anonymous';
+
+    game.load.image('ball', 'sprites/slime.png');
+    game.load.image('platform', 'sprites/platform.png');
+
+}
+
+var player;
+var platforms;
+var cursors;
+var jumpButton;
+var floor;
+var x;
+
+function create() {
+
+    player = game.add.sprite(200, 200, 'ball');
+
+    game.physics.arcade.enable(player);
+
+    player.body.collideWorldBounds = true;
+    player.body.gravity.y = 500;
+
+    platforms = game.add.physicsGroup();
+
+
+    platforms.create(150, 550, 'platform');
+    floor = new Phaser.Rectangle(390, 0, 10, 550);
+
+    platforms.setAll('body.immovable', true);
+
+    cursors = game.input.keyboard.createCursorKeys();
+    jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+}
+
+function update () {
+
+    game.physics.arcade.collide(player, platforms);
+
+    player.body.velocity.x /= 1.05;
+    
+
+    if (Math.abs(game.input.position.x - player.body.position.x) <= 100 && Math.abs(player.body.position.y - game.input.position.y) <= 100 && game.input.position.x > player.body.position.x)
+   {
+       player.body.velocity.x = -250;
+   }
+   else if (Math.abs(player.body.position.x - game.input.position.x) <= 100 && Math.abs(player.body.position.y - game.input.position.y) <= 100 && player.body.position.x > game.input.position.x)
+   {
+       player.body.velocity.x = 250;
+   }    if (Math.abs(game.input.position.y - player.body.position.y) <= 100 && Math.abs(player.body.position.x - game.input.position.x) <= 100 && game.input.position.y > player.body.position.y)
+   {
+       player.body.velocity.y = -250;
+   }
+   else if (Math.abs(player.body.position.y - game.input.position.y) <= 100 && Math.abs(player.body.position.x - game.input.position.x) <= 100 && player.body.position.y > game.input.position.y)
+   {
+       player.body.velocity.y = 250;
+   }
+   
+   if(player.body.position.x < 10)
+   {
+        player.body.velocity.x += 50;
+   }
+   if(player.body.position.x > 790-48)//48 = width of the sprite
+   {
+        player.body.velocity.x -= 50;
+   }
+}
+
+function render () {
+game.debug.geom(floor,'#0fffff');
+}
+
+</script>
