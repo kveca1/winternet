@@ -47,13 +47,13 @@ function create() {
     ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
     game.physics.arcade.enable(ball);
     
-    ball.x = (GAME_WIDTH - ball.width)  * .5;
+    ball.x = (GAME_WIDTH - ball.width)  * .5; // sets ball to the middle
     ball.body.velocity.y = -200;
 
-    scoreboard = game.add.text(game.world.centerX, 50, score1 + " - " + score2, { font: "65px Arial", fill: "#ffffff", align: "center" });
+    scoreboard = game.add.text(game.world.centerX, 50, score1 + " - " + score2, { font: "65px Arial", fill: "#ffffff", align: "center" }); //creates scoreboard
     scoreboard.anchor.set(0.5);
 
-    ball.body.collideWorldBounds = true;
+    ball.body.collideWorldBounds = true; //sets world border and gravity
     ball.body.gravity.y = 500;
 
     platforms = game.add.physicsGroup();
@@ -69,6 +69,21 @@ function create() {
     net2.height = GAME_HEIGHT *.5 - 50;
     
     net = new Phaser.Rectangle(GAME_WIDTH *.5 - 5, GAME_HEIGHT *.5, 10, GAME_HEIGHT *.5 - 50);
+    
+    //Rectangles
+    orange0 = new Phaser.Rectangle(0,GAME_HEIGHT - 25, 25, 25);
+    orange1 = new Phaser.Rectangle(25,GAME_HEIGHT - 50, 25, 25);
+    orange2 = new Phaser.Rectangle(50,GAME_HEIGHT - 25, 25, 25);
+    orange3 = new Phaser.Rectangle(75,GAME_HEIGHT - 50, 25, 25);
+    orange4 = new Phaser.Rectangle(100,GAME_HEIGHT - 25, 25, 25);
+    orange5 = new Phaser.Rectangle(125,GAME_HEIGHT - 50, 25, 25);
+    orange6 = new Phaser.Rectangle(GAME_WIDTH - 150, GAME_HEIGHT - 25, 25, 25);
+    orange7 = new Phaser.Rectangle(GAME_WIDTH - 125, GAME_HEIGHT - 50,  25, 25);
+    orange8 = new Phaser.Rectangle(GAME_WIDTH -100, GAME_HEIGHT - 25,  25, 25);
+    orange9 = new Phaser.Rectangle( GAME_WIDTH -75, GAME_HEIGHT - 50, 25, 25);
+    orange10 = new Phaser.Rectangle(GAME_WIDTH - 50, GAME_HEIGHT - 25,  25 , 25);
+    orange11 = new Phaser.Rectangle(GAME_WIDTH - 25, GAME_HEIGHT - 50,  25, 25);
+
 
     platforms.setAll('body.immovable', true);
 
@@ -95,20 +110,20 @@ function update () {
 		button = true;
     	if (Math.abs(game.input.position.x - ball.centerX) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && game.input.position.x > ball.centerX)
     	{
-   		     ball.body.velocity.x = -250;
+   		     ball.body.velocity.x += -250;
    		}
    		else if (Math.abs(ball.centerX - game.input.position.x ) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && ball.centerX > game.input.position.x)
     	{
-        	ball.body.velocity.x = 250;
+        	ball.body.velocity.x += 250;
     	}
     	
     	if (Math.abs(game.input.position.y - ball.centerY) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && game.input.position.y > ball.centerY)
     	{
-			ball.body.velocity.y = -250;
+			ball.body.velocity.y += -250;
     	}
     	else if (Math.abs(ball.centerY - game.input.position.y) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && ball.centerY > game.input.position.y)
     	{
-			ball.body.velocity.y = 250;
+			ball.body.velocity.y += 250;
     	}
 
 	}
@@ -119,7 +134,7 @@ function update () {
 	
 	if(goal1.contains(ball.x, ball.centerY))
 	{
-		score2++;
+		score2+=7;
 		ball.x = (GAME_WIDTH - ball.width)  * .5;
 		ball.y = 200;
 		ball.body.velocity.x = 0;
@@ -128,7 +143,7 @@ function update () {
 	}
 	else if(goal2.contains(ball.x, ball.centerY))
 	{
-		score1++;
+		score1+=7;
 		ball.x = (GAME_WIDTH - ball.width)  * .5;
 		ball.y = 200;
 		ball.body.velocity.x = 0;
@@ -139,9 +154,23 @@ function update () {
 }
 
 function render () {
-game.debug.geom(net,'#0fffff');
-game.debug.geom(goal1, "#ff0000");
-game.debug.geom(goal2, "#ff0000");
+game.debug.geom(net,'#ffff00');
+game.debug.geom(goal1, "#ffffff");
+game.debug.geom(goal2, "#ffffff");
+
+game.debug.geom(orange0, "#ffa500");
+game.debug.geom(orange1, "#ffa500");
+game.debug.geom(orange2, "#ffa500");
+game.debug.geom(orange3, "#ffa500");
+game.debug.geom(orange4, "#ffa500");
+game.debug.geom(orange5, "#ffa500");
+game.debug.geom(orange6, "#ffa500");
+game.debug.geom(orange7, "#ffa500");
+game.debug.geom(orange8, "#ffa500");
+game.debug.geom(orange9, "#ffa500");
+game.debug.geom(orange10, "#ffa500");
+game.debug.geom(orange11, "#ffa500");
+
 }
 
 </script>
