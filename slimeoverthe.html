@@ -18,7 +18,7 @@ function preload() {
     game.load.baseURL = 'http://examples.phaser.io/assets/';
     game.load.crossOrigin = 'anonymous';
 
-    game.load.image('ball', 'sprites/slime.png');
+    game.load.image('ball', 'https://cdn2.iconfinder.com/data/icons/iconslandsport/PNG/48x48/Football_Ball.png');
     game.load.image('platform', 'sprites/platform.png');
 
 }
@@ -43,10 +43,10 @@ function create() {
 	button = false;
 	score1 = 0;
 	score2 = 0;
-	
+
     ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
     game.physics.arcade.enable(ball);
-    
+
     ball.x = (GAME_WIDTH - ball.width)  * .5; // sets ball to the middle
     ball.body.velocity.y = -200;
 
@@ -63,13 +63,13 @@ function create() {
 
 
     platforms.create(150, GAME_HEIGHT - 50, 'platform');
-    
+
     net2 = platforms.create(GAME_WIDTH *.5 - 5, GAME_HEIGHT *.5,'platform');
     net2.width = 10;
     net2.height = GAME_HEIGHT *.5 - 50;
-    
+
     net = new Phaser.Rectangle(GAME_WIDTH *.5 - 5, GAME_HEIGHT *.5, 10, GAME_HEIGHT *.5 - 50);
-    
+
     //Rectangles
     orange0 = new Phaser.Rectangle(0,GAME_HEIGHT - 25, 25, 25);
     orange1 = new Phaser.Rectangle(25,GAME_HEIGHT - 50, 25, 25);
@@ -91,7 +91,7 @@ function create() {
 }
 
 function update () {
-	
+
 	game.physics.arcade.collide(ball, net2);
     game.physics.arcade.collide(ball, platforms);
     ball.body.velocity.x /= 1.05; /*frictional x movement*/
@@ -104,7 +104,7 @@ function update () {
     {
          ball.body.velocity.x -= 50;
     }
-    
+
 	if(game.input.activePointer.isDown && !button) // Controls the movements of the Slime with respect to the cursor
 	{
 		button = true;
@@ -116,7 +116,7 @@ function update () {
     	{
         	ball.body.velocity.x += 250;
     	}
-    	
+
     	if (Math.abs(game.input.position.y - ball.centerY) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && game.input.position.y > ball.centerY)
     	{
 			ball.body.velocity.y += -250;
@@ -130,8 +130,8 @@ function update () {
 	else if(game.input.activePointer.isUp)//ensures the ball must click a to interact and not hold down
 	{
 		button = false;
-	}	
-	
+	}
+
 	if(goal1.contains(ball.x, ball.centerY))
 	{
 		score2+=7;
@@ -150,7 +150,7 @@ function update () {
 		ball.body.velocity.y = -200;
 		scoreboard.text = score1 + " - " + score2;
 	}
-	
+
 }
 
 function render () {
