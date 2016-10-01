@@ -28,6 +28,7 @@ var platforms;
 var cursors;
 var jumpButton;
 var net;
+var net2;
 var button;
 
 var goal1;
@@ -35,7 +36,7 @@ var goal2;
 
 var score1;
 var score2;
-var scorboard;
+var scoreboard;
 
 function create() {
 
@@ -62,35 +63,33 @@ function create() {
 
 
     platforms.create(150, GAME_HEIGHT - 50, 'platform');
-    net = new Phaser.Rectangle(GAME_WIDTH *.5 - 3, GAME_HEIGHT *.5, 6, GAME_HEIGHT *.5 - 50);
+    
+    net2 = platforms.create(GAME_WIDTH *.5 - 5, GAME_HEIGHT *.5,'platform');
+    net2.width = 10;
+    net2.height = GAME_HEIGHT *.5 - 50;
+    
+    net = new Phaser.Rectangle(GAME_WIDTH *.5 - 5, GAME_HEIGHT *.5, 10, GAME_HEIGHT *.5 - 50);
 
     platforms.setAll('body.immovable', true);
 
     cursors = game.input.keyboard.createCursorKeys();
-    jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
 }
 
 function update () {
-
+	
+	game.physics.arcade.collide(ball, net2);
     game.physics.arcade.collide(ball, platforms);
-	ball.body.velocity.x /= 1.05; /*frictional x movement*/
+    ball.body.velocity.x /= 1.05; /*frictional x movement*/
 
 	if(ball.body.position.x < 10) // pushes ball sprite from wall
     {
          ball.body.velocity.x += 50;
     }
-    if(ball.body.position.x > GAME_WIDTH - 10 - ball.width)
+    else if(ball.body.position.x > GAME_WIDTH - 10 - ball.width)
     {
          ball.body.velocity.x -= 50;
     }
     
-    if(net.contains(ball.centerX, ball.centerY))
-	{
-		ball.body.velocity.x = (Math.random()-.5) * 10000;
-		ball.body.velocity.y = (Math.random()-.5) * 10000;
-	}
-
 	if(game.input.activePointer.isDown && !button) // Controls the movements of the Slime with respect to the cursor
 	{
 		button = true;
@@ -143,7 +142,6 @@ function render () {
 game.debug.geom(net,'#0fffff');
 game.debug.geom(goal1, "#ff0000");
 game.debug.geom(goal2, "#ff0000");
-
 }
 
 </script>
