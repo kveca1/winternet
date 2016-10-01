@@ -7,8 +7,9 @@
  *
  * This source requires Phaser 2.6.2
  */
-
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+const GAME_WIDTH = 800;
+const GAME_HEIGHT = 600;
+var game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
 
@@ -36,7 +37,7 @@ function create() {
 
 	button = false;
 	
-    player = game.add.sprite(400, 200, 'ball');//adds ball to the game
+    player = game.add.sprite((GAME_WIDTH *.5) , 200, 'ball');//adds ball to the game
 
     game.physics.arcade.enable(player);
 
@@ -45,12 +46,12 @@ function create() {
 
     platforms = game.add.physicsGroup();
 
-	goal1 = new Phaser.Rectangle(0, 550 , 150, 50);
-	goal2 = new Phaser.Rectangle(650, 550 , 150, 50);
+	goal1 = new Phaser.Rectangle(0, GAME_HEIGHT - 50, 150, 50);
+	goal2 = new Phaser.Rectangle(GAME_WIDTH - 150, GAME_HEIGHT - 50, 150, 50);
 
 
-    platforms.create(150, 550, 'platform');
-    net = new Phaser.Rectangle(397, 0, 6, 550);
+    platforms.create(150, GAME_HEIGHT - 50, 'platform');
+    net = new Phaser.Rectangle(GAME_WIDTH *.5 - 3, 0, 6, GAME_HEIGHT - 50);
 
     platforms.setAll('body.immovable', true);
 
@@ -62,13 +63,13 @@ function create() {
 function update () {
 
     game.physics.arcade.collide(player, platforms);
-	player.body.velocity.x /= 1.05;
+	player.body.velocity.x /= 1.05; /*frictional x movement*/
 
-	if(player.body.position.x < 10)
+	if(player.body.position.x < 10) // pushes player sprite from wall
     {
          player.body.velocity.x += 50;
     }
-    if(player.body.position.x > 790-player.width)//48 = width of the sprite  
+    if(player.body.position.x > GAME_WIDTH - 10 - player.width)
     {
          player.body.velocity.x -= 50;
     }
