@@ -1,0 +1,16 @@
+<h1>Login</h1>
+<input type="text" onsubmit="submit">
+
+<script type="text/javascript" src="node_modules/socket.io-client/socket.io.js"></script>
+<script src="jquery-3.1.1.js"></script>
+<script type="text/javascript">
+var socket = io();
+
+$(document).keyup(function (e) {
+  if ($('input:focus') && (e.keyCode === 13)) {
+    console.log(e.target.value);
+    socket.emit('username', e.target.value);
+  }
+});
+
+</script>
