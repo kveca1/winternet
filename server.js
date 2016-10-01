@@ -23,4 +23,22 @@ io.on('connection', socket => {
   socket.on('disconnected', () => {
     console.log('disconnected');
   });
+  socket.on('ballSetX', function(data) {
+	socket.broadcast.emit('ballSetX', data);
+  });
+  socket.on('ballSetY', function(data) {
+	socket.broadcast.emit('ballSetY', data);
+  });
+  socket.on('ballSetVX', function(data) {
+	socket.broadcast.emit('ballSetVX', data);
+  });
+  socket.on('ballSetVy', function(data) {
+	socket.broadcast.emit('ballSetVY', data);
+  });
+  socket.on('ballChangeVX', function(data) {
+	socket.broadcast.emit('ballChangeVX',data);
+  });
+  socket.on('ballChangeVY', function(data) {
+	socket.broadcast.emit('ballChangeVY',data);
+  });
 });
