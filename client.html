@@ -1,0 +1,15 @@
+<script type="text/javascript" src="node_modules/socket.io-client/socket.io.js"></script>
+<script type="text/javascript">
+
+console.log('test');
+
+var socket = io();
+
+socket.emit('test');
+
+socket.on('respond', () => {
+  console.log('server responded');
+});
+
+</script>
+Test
