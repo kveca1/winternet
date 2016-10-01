@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1348.17">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; min-height: 14.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    span.s1 {font-variant-ligatures: no-common-ligatures}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;script type="text/javascript" src="./node_modules/phaser/build/phaser.min.js"&gt;&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;script type="text/javascript"&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p3">function preload() {</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>game.stage.backgroundColor = '#85b5e1';</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>game.load.baseURL = 'http://examples.phaser.io/assets/';</p>
+<p class="p3"><span class="Apple-converted-space">    </span>game.load.crossOrigin = 'anonymous';</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>game.load.image('player', 'sprites/slime.png');</p>
+<p class="p3"><span class="Apple-converted-space">    </span>game.load.image('platform', 'sprites/platform.png');</p>
+<p class="p4"><br></p>
+<p class="p3">}</p>
+<p class="p4"><br></p>
+<p class="p3">var player;</p>
+<p class="p3">var platforms;</p>
+<p class="p3">var cursors;</p>
+<p class="p3">var jumpButton;</p>
+<p class="p4"><br></p>
+<p class="p3">function create() {</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>player = game.add.sprite(200, 200, 'player');</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>game.physics.arcade.enable(player);</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>player.body.collideWorldBounds = true;</p>
+<p class="p3"><span class="Apple-converted-space">    </span>player.body.gravity.y = 300;</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>platforms = game.add.physicsGroup();</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>platforms.create(500, 150, 'platform');</p>
+<p class="p3"><span class="Apple-converted-space">    </span>platforms.create(-200, 300, 'platform');</p>
+<p class="p3"><span class="Apple-converted-space">    </span>platforms.create(400, 450, 'platform');</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>platforms.setAll('body.immovable', true);</p>
+<p class="p4"><span class="Apple-converted-space">    </span></p>
+<p class="p3"><span class="Apple-converted-space">    </span>cursors = game.input.keyboard.createCursorKeys();</p>
+<p class="p3"><span class="Apple-converted-space">    </span>jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);</p>
+<p class="p4"><br></p>
+<p class="p3">}</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p3">function update () {</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>game.physics.arcade.collide(player, platforms);</p>
+<p class="p4"><br></p>
+<p class="p3">if(player.body.position.x &lt; 10)</p>
+<p class="p3"><span class="Apple-converted-space">   </span>{</p>
+<p class="p3"><span class="Apple-converted-space">        </span>player.body.velocity.x += 50;</p>
+<p class="p3"><span class="Apple-converted-space">   </span>}</p>
+<p class="p3"><span class="Apple-converted-space">   </span>if(player.body.position.x &gt; 790-48)//48 = width of the sprite</p>
+<p class="p3"><span class="Apple-converted-space">   </span>{</p>
+<p class="p3"><span class="Apple-converted-space">        </span>player.body.velocity.x -= 50;</p>
+<p class="p3"><span class="Apple-converted-space">   </span>}</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>//player.body.velocity.x = 0;</p>
+<p class="p3">if(game.input.activePointer.isDown){</p>
+<p class="p3"><span class="Apple-converted-space">    </span>if (Math.abs(game.input.position.x - player.body.position.x) &lt;= 100 &amp;&amp; Math.abs(player.body.position.y - game.input.position.y) &lt;= 100 &amp;&amp; game.input.position.x &gt; player.body.position.x)</p>
+<p class="p3"><span class="Apple-converted-space">    </span>{</p>
+<p class="p3"><span class="Apple-converted-space">        </span>player.body.velocity.x = -250;</p>
+<p class="p3"><span class="Apple-converted-space">    </span>}</p>
+<p class="p3"><span class="Apple-converted-space">    </span>else if (Math.abs(player.body.position.x - game.input.position.x) &lt;= 100 &amp;&amp; Math.abs(player.body.position.y - game.input.position.y) &lt;= 100 &amp;&amp; player.body.position.x &gt; game.input.position.x)</p>
+<p class="p3"><span class="Apple-converted-space">    </span>{</p>
+<p class="p3"><span class="Apple-converted-space">        </span>player.body.velocity.x = 250;</p>
+<p class="p3"><span class="Apple-converted-space">    </span>}</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>if (Math.abs(game.input.position.y - player.body.position.y) &lt;= 100 &amp;&amp; Math.abs(player.body.position.x - game.input.position.x) &lt;= 100 &amp;&amp; game.input.position.y &gt; player.body.position.y)</p>
+<p class="p3"><span class="Apple-converted-space">    </span>{</p>
+<p class="p3"><span class="Apple-converted-space">        </span>player.body.velocity.y = -250;</p>
+<p class="p3"><span class="Apple-converted-space">    </span>}</p>
+<p class="p3"><span class="Apple-converted-space">    </span>else if (Math.abs(player.body.position.y - game.input.position.y) &lt;= 100 &amp;&amp; Math.abs(player.body.position.x - game.input.position.x) &lt;= 100 &amp;&amp; player.body.position.y &gt; game.input.position.y)</p>
+<p class="p3"><span class="Apple-converted-space">    </span>{</p>
+<p class="p3"><span class="Apple-converted-space">        </span>player.body.velocity.y = 250;</p>
+<p class="p3"><span class="Apple-converted-space">    </span>}</p>
+<p class="p3">}</p>
+<p class="p4"><br></p>
+<p class="p3"><span class="Apple-converted-space">    </span>if (jumpButton.isDown &amp;&amp; (player.body.onFloor() || player.body.touching.down))</p>
+<p class="p3"><span class="Apple-converted-space">    </span>{</p>
+<p class="p3"><span class="Apple-converted-space">        </span>player.body.velocity.y = -400;</p>
+<p class="p3"><span class="Apple-converted-space">    </span>}</p>
+<p class="p3">}</p>
+<p class="p4"><br></p>
+<p class="p4"><br></p>
+<p class="p3">function render () {</p>
+<p class="p4"><br></p>
+<p class="p3">}</p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;/script&gt;</span></p>
+</body>
+</html>
