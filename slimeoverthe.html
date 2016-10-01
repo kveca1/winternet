@@ -23,7 +23,7 @@ function preload() {
 
 }
 
-var player;
+var ball;
 var platforms;
 var cursors;
 var jumpButton;
@@ -35,6 +35,7 @@ var goal2;
 
 var score1;
 var score2;
+var scorboard;
 
 function create() {
 
@@ -42,16 +43,17 @@ function create() {
 	score1 = 0;
 	score2 = 0;
 	
-    player = game.add.sprite(0 , 200, 'ball');//adds ball to the game
-    game.physics.arcade.enable(player);
+    ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
+    game.physics.arcade.enable(ball);
     
-    player.x = (GAME_WIDTH - player.width)  * .5;
-    player.body.velocity.y = -200;
+    ball.x = (GAME_WIDTH - ball.width)  * .5;
+    ball.body.velocity.y = -200;
 
-    //game.physics.arcade.enable(player);
+    scoreboard = game.add.text(game.world.centerX, 50, score1 + " - " + score2, { font: "65px Arial", fill: "#ffffff", align: "center" });
+    scoreboard.anchor.set(0.5);
 
-    player.body.collideWorldBounds = true;
-    player.body.gravity.y = 500;
+    ball.body.collideWorldBounds = true;
+    ball.body.gravity.y = 500;
 
     platforms = game.add.physicsGroup();
 
@@ -60,7 +62,7 @@ function create() {
 
 
     platforms.create(150, GAME_HEIGHT - 50, 'platform');
-    net = new Phaser.Rectangle(GAME_WIDTH *.5 - 3, 0, 6, GAME_HEIGHT - 50);
+    net = new Phaser.Rectangle(GAME_WIDTH *.5 - 3, GAME_HEIGHT *.5, 6, GAME_HEIGHT *.5 - 50);
 
     platforms.setAll('body.immovable', true);
 
@@ -71,66 +73,69 @@ function create() {
 
 function update () {
 
-    game.physics.arcade.collide(player, platforms);
-	player.body.velocity.x /= 1.05; /*frictional x movement*/
+    game.physics.arcade.collide(ball, platforms);
+	ball.body.velocity.x /= 1.05; /*frictional x movement*/
 
-	if(player.body.position.x < 10) // pushes player sprite from wall
+	if(ball.body.position.x < 10) // pushes ball sprite from wall
     {
-         player.body.velocity.x += 50;
+         ball.body.velocity.x += 50;
     }
-    if(player.body.position.x > GAME_WIDTH - 10 - player.width)
+    if(ball.body.position.x > GAME_WIDTH - 10 - ball.width)
     {
-         player.body.velocity.x -= 50;
+         ball.body.velocity.x -= 50;
     }
-
-
-    //player.body.velocity.x = 0;
+    
+    if(net.contains(ball.centerX, ball.centerY))
+	{
+		ball.body.velocity.x = (Math.random()-.5) * 10000;
+		ball.body.velocity.y = (Math.random()-.5) * 10000;
+	}
 
 	if(game.input.activePointer.isDown && !button) // Controls the movements of the Slime with respect to the cursor
 	{
 		button = true;
-    	if (Math.abs(game.input.position.x - player.centerX) <= 100 && Math.abs(player.centerY - game.input.position.y) <= 100 && game.input.position.x > player.centerX)
+    	if (Math.abs(game.input.position.x - ball.centerX) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && game.input.position.x > ball.centerX)
     	{
-   		     player.body.velocity.x = -250;
+   		     ball.body.velocity.x = -250;
    		}
-   		else if (Math.abs(player.centerX - game.input.position.x ) <= 100 && Math.abs(player.centerY - game.input.position.y) <= 100 && player.centerX > game.input.position.x)
+   		else if (Math.abs(ball.centerX - game.input.position.x ) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && ball.centerX > game.input.position.x)
     	{
-        	player.body.velocity.x = 250;
+        	ball.body.velocity.x = 250;
     	}
     	
-    	if (Math.abs(game.input.position.y - player.centerY) <= 100 && Math.abs(player.centerX - game.input.position.x) <= 100 && game.input.position.y > player.centerY)
+    	if (Math.abs(game.input.position.y - ball.centerY) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && game.input.position.y > ball.centerY)
     	{
-			player.body.velocity.y = -250;
+			ball.body.velocity.y = -250;
     	}
-    	else if (Math.abs(player.centerY - game.input.position.y) <= 100 && Math.abs(player.centerX - game.input.position.x) <= 100 && player.centerY > game.input.position.y)
+    	else if (Math.abs(ball.centerY - game.input.position.y) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && ball.centerY > game.input.position.y)
     	{
-			player.body.velocity.y = 250;
+			ball.body.velocity.y = 250;
     	}
 
 	}
-	else if(game.input.activePointer.isUp)//ensures the player must click a to interact and not hold down
+	else if(game.input.activePointer.isUp)//ensures the ball must click a to interact and not hold down
 	{
 		button = false;
 	}	
 	
-	if(goal1.contains(player.x, player.centerY))
+	if(goal1.contains(ball.x, ball.centerY))
 	{
 		score2++;
-		player.x = (GAME_WIDTH - player.width)  * .5;
-		player.y = 200;
-		player.body.velocity.x = 0;
-		player.body.velocity.y = -200;
+		ball.x = (GAME_WIDTH - ball.width)  * .5;
+		ball.y = 200;
+		ball.body.velocity.x = 0;
+		ball.body.velocity.y = -200;
+		scoreboard.text = score1 + " - " + score2;
 	}
-	else if(goal2.contains(player.x, player.centerY))
+	else if(goal2.contains(ball.x, ball.centerY))
 	{
 		score1++;
-		player.x = (GAME_WIDTH - player.width)  * .5;
-		player.y = 200;
-		player.body.velocity.x = 0;
-		player.body.velocity.y = -200;
+		ball.x = (GAME_WIDTH - ball.width)  * .5;
+		ball.y = 200;
+		ball.body.velocity.x = 0;
+		ball.body.velocity.y = -200;
+		scoreboard.text = score1 + " - " + score2;
 	}
-	
-	
 	
 }
 
