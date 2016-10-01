@@ -32,7 +32,7 @@ io.on('connection', socket => {
   socket.on('ballSetVX', function(data) {
 	socket.broadcast.emit('ballSetVX', data);
   });
-  socket.on('ballSetVy', function(data) {
+  socket.on('ballSetVY', function(data) {
 	socket.broadcast.emit('ballSetVY', data);
   });
   socket.on('ballChangeVX', function(data) {
