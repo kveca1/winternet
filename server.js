@@ -11,40 +11,33 @@ server.listen(port, () => {
 
 app.use(express.static(__dirname));
 
-let players = 0;
+let players = [];
+var host;
 
 io.on('connection', socket => {
-  socket.on('mouse move', (data) => {
-    console.log(data);
+
+  //socket.on('mouse move', (data) => {
+  //  console.log(data);
+  //});
+  socket.on('addPlayer', function(data) {
+	if(players.length == 0)
+	{
+		host = data;
+		socket.emit('isHost');
+	}
+	playersA.push(data);
   });
   socket.on('connected', () => {
     console.log('connected');
   });
-  socket.on('disconnected', () => {
+  socket.on('disconnect', () => {
     console.log('disconnected');
+	
   });
-  socket.on('ballSetX', function(data) {
-	socket.broadcast.emit('ballSetX', data);
+  socket.on('ballSet', function(data) {
+	socket.broadcast.emit('ballSet', data);
   });
-  socket.on('ballSetY', function(data) {
-	socket.broadcast.emit('ballSetY', data);
-  });
-  socket.on('ballSetVX', function(data) {
-	socket.broadcast.emit('ballSetVX', data);
-  });
-  socket.on('ballSetVY', function(data) {
-	socket.broadcast.emit('ballSetVY', data);
-  });
-  socket.on('ballChangeVX', function(data) {
-	socket.broadcast.emit('ballChangeVX',data);
-  });
-  socket.on('ballChangeVY', function(data) {
-	socket.broadcast.emit('ballChangeVY',data);
-  });
-  socket.on('Score1', function(data) {
-	socket.broadcast.emit('Score1', data);
-  });
-  socket.on('Score2', function(data) {
-	socket.broadcast.emit('Score2', data);
+  socket.on('score', function(data) {
+	socket.broadcast.emit('score', data);
   });
 });
