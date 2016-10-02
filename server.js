@@ -83,6 +83,6 @@ io.on('connection', socket => {
   });
   socket.on('click', function(data){
     players[0].socket.emit(data);
-    console.log("Click X: " data[0] + " Y: " + data[1]);
+    console.log("Click X: " + data[0] + " Y: " + data[1]);
   });
 });
