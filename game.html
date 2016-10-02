@@ -150,7 +150,17 @@ function create() {
     }
   });
 
-
+	socket.on('end', function(data)
+	{
+		if(data[0] == 1)
+		{
+			endscreen("Home", data[1], data[2]);
+		}
+		else
+		{
+			endscreen("Away", data[1], data[1]);
+		}
+	});
 }
 
 var lastpos = {}
