@@ -9,17 +9,21 @@ $(document).keyup(function (e) {
   if ($('input:focus') && (e.keyCode === 13)) {
     console.log(e.target.value);
     localStorage.setItem('username', e.target.value);
+    window.location = '/game.html';
   }
 });
 
 </script>
 
 <style>
+body
+{
+  background-color: rgb(255,165,0);
+}
 span
 {
   font-family: helvetica;
   font-sixe: x-large;
-  background-color: rgb(255,165,0);
 }
 h1
 {
