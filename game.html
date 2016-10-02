@@ -112,7 +112,8 @@ function create() {
 	});
 	socket.on('ballSet', function(data)
 	{
-		ball = data;
+    ball.x = data.x;
+    ball.y = data.y
 	});
 
     socket.on('score', function(data)
@@ -144,8 +145,7 @@ function update () {
     }
 
 	if(game.input.activePointer.isDown && !button) // Controls the movements of the Slime with respect to the cursor
-	{ball.body.x = data.x;
-		ball.body.y = data.y;
+	{
 		button = true;
     	if (Math.abs(game.input.position.x - ball.centerX) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && game.input.position.x > ball.centerX)
     	{
@@ -173,7 +173,7 @@ function update () {
 
 	if(goal1.contains(ball.x, ball.centerY))
 	{
-		socket.broadcast.emit('score',2);
+		socket.emit('score',2);
 		score2+=7;ball.body.x = data.x;
 		ball.body.y = data.y;
 		ball.x = (GAME_WIDTH - ball.width)  * .5;
@@ -187,7 +187,7 @@ function update () {
 	}
 	else if(goal2.contains(ball.x, ball.centerY))
 	{
-		socket.broadcast.emit('score',1);
+		socket.emit('score',1);
 		score1+=7;
 		ball.x = (GAME_WIDTH - ball.width)  * .5;
 		ball.y = 200;
@@ -199,7 +199,7 @@ function update () {
     }
 	}
 
-		socket.broadcast.emit('ballSet', ball);
+		socket.emit('ballSet', { x: ball.x, y: ball.y });
 	}
 
 }
