@@ -126,11 +126,11 @@ function create() {
     {
     scoreboard.text = data[0] + " - " + data[1];
 
-    if(score[0]==maxscore){
-      endscreen(name1, score[0], score[1]);
+    if(data[0]==maxscore){
+      endscreen(name1, data[0], data[1]);
     }
-    if(score[1]==maxscore){
-      endscreen(name2, score[1], score[0]);
+    if(data[1]==maxscore){
+      endscreen(name2, data[1], data[0]);
     }
  	});
 

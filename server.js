@@ -79,6 +79,6 @@ io.on('connection', socket => {
 
     socket.emit('score', score);
 	  socket.broadcast.emit('score', score);
-    console.log("score " + data)
+    console.log("score " + data);
   });
 });
