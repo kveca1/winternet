@@ -23,6 +23,7 @@ io.on('connection', socket => {
 	{
 		host = data;
 		socket.emit('isHost');
+    console.log("addPlayer " + data);
 	}
 	playersA.push(data);
   });
@@ -31,12 +32,14 @@ io.on('connection', socket => {
   });
   socket.on('disconnect', () => {
     console.log('disconnected');
-	
+
   });
   socket.on('ballSet', function(data) {
 	socket.broadcast.emit('ballSet', data);
+  console.log("ballSet " + data)
   });
   socket.on('score', function(data) {
 	socket.broadcast.emit('score', data);
+  console.log("score " + data)
   });
 });
