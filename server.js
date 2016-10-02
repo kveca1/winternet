@@ -12,6 +12,7 @@ server.listen(port, () => {
 app.use(express.static(__dirname));
 
 let players = [];
+let score = [0,0]
 
 io.on('connection', socket => {
   //socket.on('mouse move', (data) => {
@@ -70,7 +71,12 @@ io.on('connection', socket => {
   });
 
   socket.on('score', function(data) {
-	socket.broadcast.emit('score', data);
-  console.log("score " + data)
+    if(data == 1)
+      score[0] += 7;
+    else
+      score[1] +=7;
+
+	  socket.broadcast.emit('score', score);
+    console.log("score " + data)
   });
 });
