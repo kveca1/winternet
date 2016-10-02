@@ -36,6 +36,7 @@ io.on('connection', socket => {
     socket: socket
   });
   console.log("addPlayer " + data);
+  socket.emit('score', score);
   });
 
   socket.on('connected', () => {
@@ -78,6 +79,10 @@ io.on('connection', socket => {
 
     socket.emit('score', score);
 	  socket.broadcast.emit('score', score);
-    console.log("score " + data)
+    console.log("score " + data);
+  });
+  socket.on('click', function(data){
+    players[0].socket.emit(data);
+    console.log("Click X: " data[0] + " Y: " + data[1]);
   });
 });
