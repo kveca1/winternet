@@ -67,7 +67,6 @@ io.on('connection', socket => {
 
   socket.on('ballSet', function(data) {
 	socket.broadcast.emit('ballSet', data);
-  console.log("ballSet " + data)
   });
 
   socket.on('score', function(data) {
