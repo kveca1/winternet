@@ -12,7 +12,6 @@ server.listen(port, () => {
 app.use(express.static(__dirname));
 
 let players = [];
-var host;
 
 io.on('connection', socket => {
   //socket.on('mouse move', (data) => {
@@ -21,7 +20,6 @@ io.on('connection', socket => {
   socket.on('addPlayer', function(data) {
 	if(players.length == 0)
 	{
-		host = data;
     socket.emit('isHost', true);
     console.log("isHost = true");
   }
@@ -45,22 +43,25 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     console.log('disconnected');
-    if(players[0].socket === socket)
+    if(players.length > 0)
     {
-      console.log("Host " + players[0].name + " is leaving");
-      players.shift();
-      if(players.length > 1)
+      if(players[0].socket === socket)
       {
-        players[0].socket.emit('isHost', true);
-        console.log("New host is " + players[0].name)
+        console.log("Host " + players[0].name + " is leaving");
+        players.shift();
+        if(players.length > 0)
+        {
+          players[0].socket.emit('isHost', true);
+          console.log("New host is " + players[0].name)
+        }
       }
-    }
-    else
-    {
-      console.log("Player " + players[0].name + " is leaving");
-      for(var i = 0; i < players.length; i++)
+      else
+      {
+        console.log("Player " + players[0].name + " is leaving");
+        for(var i = 0; i < players.length; i++)
         if(player[i].socket == socket)
-          players.splice(i,1);
+            players.splice(i,1);
+        }
     }
   });
 
