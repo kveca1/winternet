@@ -64,14 +64,13 @@ io.on('connection', socket => {
     }
   });
 
-  /*socket.on('ballSet', function(data) {
-	socket.broadcast.emit('ballSet', data);
+  socket.on('serverBallSet', function(data) {
+	socket.broadcast.emit('serverBallSet', data);
   console.log("ballSet " + data)
   });
 
-  socket.on('score', function(data) {
+  socket.on('serverScore', function(data) {
 	socket.broadcast.emit('score', data);
   console.log("score " + data)
   });
-  */
 });
