@@ -31,22 +31,47 @@ io.on('connection', socket => {
     socket.emit('isHost', false);
   }
 
-  players.push(data);
+  players.push(
+  {
+    name: data,
+    socket: socket
+  });
   console.log("addPlayer " + data);
   });
+
   socket.on('connected', () => {
     console.log('connected');
   });
+
   socket.on('disconnect', () => {
     console.log('disconnected');
-
+    if(players[0].socket === socket)
+    {
+      console.log("Host " + players[0].name + " is leaving");
+      players.shift();
+      if(players.length > 1)
+      {
+        players[0].socket.emit('isHost', true);
+        console.log("New host is " + players[0].name)
+      }
+    }
+    else
+    {
+      console.log("Player " + players[0].name + " is leaving");
+      for(var i = 0; i < players.length; i++)
+        if(player[i].socket == socket)
+          players.splice(i,1);
+    }
   });
-  socket.on('ballSet', function(data) {
+
+  /*socket.on('ballSet', function(data) {
 	socket.broadcast.emit('ballSet', data);
   console.log("ballSet " + data)
   });
+
   socket.on('score', function(data) {
 	socket.broadcast.emit('score', data);
   console.log("score " + data)
   });
+  */
 });
