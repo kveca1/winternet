@@ -128,14 +128,27 @@ function create() {
     socket.on('score', function(data)
     {
     scoreboard.text = data[0] + " - " + data[1];
-
-    if(data[0]==maxscore){
-      endscreen(name1, data[0], data[1]);
-    }
-    if(data[1]==maxscore){
-      endscreen(name2, data[1], data[0]);
-    }
  	});
+  socket.on('click',function(data)
+  {
+    if (Math.abs(data[0] - ball.centerX) <= 100 && Math.abs(ball.centerY - data[1]) <= 100 && data[0]  > ball.centerX)
+    {
+        ball.body.velocity.x += -250;
+    }
+    else if (Math.abs(ball.centerX - data[0]) <= 100 && Math.abs(ball.centerY - data[1]) <= 100 && ball.centerX > data[0] )
+    {
+        ball.body.velocity.x += 250;
+    }
+
+    if (Math.abs(data[1]- ball.centerY) <= 100 && Math.abs(ball.centerX - data[0] ) <= 100 && data[1] > ball.centerY)
+    {
+      ball.body.velocity.y += -250;
+    }
+    else if (Math.abs(ball.centerY - data[1]) <= 100 && Math.abs(ball.centerX - data[0] ) <= 100 && ball.centerY > data[1])
+    {
+      ball.body.velocity.y += 250;
+    }
+  });
 
 
 }
@@ -162,24 +175,7 @@ function update () {
 	if(game.input.activePointer.isDown && !button) // Controls the movements of the Slime with respect to the cursor
 	{
 		button = true;
-    	if (Math.abs(game.input.position.x - ball.centerX) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && game.input.position.x > ball.centerX)
-    	{
-   		    ball.body.velocity.x += -250;
-   		}
-   		else if (Math.abs(ball.centerX - game.input.position.x ) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && ball.centerX > game.input.position.x)
-    	{
-        	ball.body.velocity.x += 250;
-    	}
-
-    	if (Math.abs(game.input.position.y - ball.centerY) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && game.input.position.y > ball.centerY)
-    	{
-  			ball.body.velocity.y += -250;
-    	}
-    	else if (Math.abs(ball.centerY - game.input.position.y) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && ball.centerY > game.input.position.y)
-    	{
-  			ball.body.velocity.y += 250;
-    	}
-
+    	socket.emit('click', [game.input.position.x,game.input.position.y]);
 	}
 	else if(game.input.activePointer.isUp)//ensures the ball must click a to interact and not hold down
 	{
@@ -195,7 +191,9 @@ function update () {
 		ball.body.velocity.x = 0;
 		ball.body.velocity.y = -200;
 		//scoreboard.text = score1 + " - " + score2;
-
+    if(score2 == maxscore){
+      endscreen(name2, score2, score1);
+    }
 	}
 	else if(goal2.contains(ball.x, ball.centerY))
 	{
@@ -206,11 +204,25 @@ function update () {
 		ball.body.velocity.x = 0;
 		ball.body.velocity.y = -200;
 		//scoreboard.text = score1 + " - " + score2;
-
+    if(score1==maxscore){
+      endscreen(name1, score1, score2);
+    }
 	}
 
 		socket.emit('ballSet', { x: ball.x, y: ball.y });
 	}
+  else
+  {
+    if(game.input.activePointer.isDown && !button)
+    {
+      button = true;
+      socket.emit('click', [game.input.position.x,game.input.position.y]);
+    }
+    else if(game.input.activePointer.isUp)
+    {
+      button = false;
+    }
+  }
 
 
 }
