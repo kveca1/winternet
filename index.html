@@ -40,6 +40,14 @@ var score2;
 var scoreboard;
 var socket;
 
+var name1= "home";
+var name2= "away";
+var name1board;
+var name2board;
+
+var finaltext;
+var maxscore;
+
 function create() {
 
   socket = io();
@@ -48,6 +56,10 @@ function create() {
 	button = false;
 	score1 = 0;
 	score2 = 0;
+  min = Math.ceil(1);
+  max = Math.floor(11);
+  maxscore= Math.floor(Math.random() * (max - min + 1)) + min;
+  maxscore *= 7;
 
     ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
     game.physics.arcade.enable(ball);
@@ -57,6 +69,9 @@ function create() {
 
     scoreboard = game.add.text(game.world.centerX, 50, score1 + " - " + score2, { font: "65px Arial", fill: "#ffffff", align: "center" }); //creates scoreboard
     scoreboard.anchor.set(0.5);
+    name1board = game.add.text(game.world.leftX, 50, name1, { font: "48px Arial", fill: "#ffffff", align: "left" });
+    name2board = game.add.text(GAME_WIDTH, 112, name2, { font: "48px Arial", fill: "#ffffff", align: "right" });
+    name2board.anchor.set(1);
 
     ball.body.collideWorldBounds = true; //sets world border and gravity
     ball.body.gravity.y = 500;
@@ -92,7 +107,7 @@ function create() {
 
     platforms.setAll('body.immovable', true);
 
-    cursors = game.input.keyboard.createCursorKeys();
+    //cursors = game.input.keyboard.createCursorKeys();
 }
 
 var lastpos = {}
@@ -153,6 +168,9 @@ function update () {
 		ball.body.velocity.x = 0;
 		ball.body.velocity.y = -200;
 		scoreboard.text = score1 + " - " + score2;
+    if(score2 == maxscore){
+      endscreen(name2, score2, score1);
+    }
 	}
 	else if(goal2.contains(ball.x, ball.centerY))
 	{
@@ -162,8 +180,17 @@ function update () {
 		ball.body.velocity.x = 0;
 		ball.body.velocity.y = -200;
 		scoreboard.text = score1 + " - " + score2;
+    if(score1==maxscore){
+      endscreen(name1, score1, score2);
+    }
 	}
 
+}
+
+function endscreen(winner, winscore, losescore){
+  finaltext = game.add.text(game.world.centerX, 150, "Congrats, " + winner + "!\nFinal Score: " + winscore + " - " + losescore, { font: "65px Arial", fill: "#ffffff", align: "center" }); //creates scoreboard
+  finaltext.anchor.set(0.5);
+  //endtext.text = "Congrats, " + winner + "!\nFinal Score: " + winscore + " - " + losescore;
 }
 
 function render () {
