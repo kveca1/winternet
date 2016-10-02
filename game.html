@@ -75,14 +75,11 @@ function create() {
   maxscore= Math.floor(Math.random() * (max - min + 1)) + min;
   maxscore *= 7;
 
-<<<<<<< Updated upstream
-=======
   //music = game.sound.play('rocky top');
 
     ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
     game.physics.arcade.enable(ball);
 
->>>>>>> Stashed changes
     ball.x = (GAME_WIDTH - ball.width)  * .5; // sets ball to the middle
     ball.body.velocity.y = -200;
 
@@ -212,6 +209,7 @@ function update () {
 
 		socket.emit('ballSet', { x: ball.x, y: ball.y });
 	}
+
 
 }
 
