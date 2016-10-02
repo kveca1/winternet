@@ -82,11 +82,8 @@ io.on('connection', socket => {
     console.log("score " + data);
   });
   socket.on('click', function(data){
-<<<<<<< HEAD
     players[0].socket.emit(data);
-=======
     players[0].socket.emit('click', data);
->>>>>>> 42325a47dd4833ba7715a1e891b971586faab37e
     console.log("Click X: " + data[0] + " Y: " + data[1]);
   });
 });
