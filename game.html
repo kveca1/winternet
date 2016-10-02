@@ -22,7 +22,7 @@ function preload() {
     game.load.image('ball', 'https://cdn2.iconfinder.com/data/icons/iconslandsport/PNG/48x48/Football_Ball.png');
     game.load.image('platform', 'sprites/platform.png');
 
-    game.load.audio('go vols', ['rockytop.mp3']);
+    game.load.audio('rocky top', 'https://raw.githubusercontent.com/kveca1/winternet/master/rockytop.mp3');
 }
 
 var ball;
@@ -235,12 +235,12 @@ function render () {
   game.debug.geom(orange10, "#ffa500");
   game.debug.geom(orange11, "#ffa500");
 
-  game.debug.soundInfo(music, 32, 32);
+  //game.debug.soundInfo(music, 32, 32);
 
-  if (music.isDecoding)
-  {
-      game.debug.text("Decoding MP3 ...", 32, 200);
-  }
+  //if (music.isDecoding)
+  //{
+    //  game.debug.text("Decoding MP3 ...", 32, 200);
+  //}
 }
 
 </script>
