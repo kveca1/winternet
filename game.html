@@ -217,6 +217,22 @@ function endscreen(winner, winscore, losescore){
   finaltext.anchor.set(0.5);
   //endtext.text = "Congrats, " + winner + "!\nFinal Score: " + winscore + " - " + losescore;
   music = game.sound.play('rocky top');
+  game.load.spritesheet('bullets', 'FIREWORKS.png', 6, 6);
+
+firemit= game.add.emitter(game.world.centerX, game.world.centerY, 20);
+
+firemit.makeParticles('bullets', [30000,30001,30002,30003,30004], 20, true, true);
+
+firemit.minParticleSpeed.setTo(-200, -300);
+firemit.maxParticleSpeed.setTo(200, -400);
+firemit.minParticleScale = 0.5;
+firemit.maxParticleScale = 2;
+firemit.gravity = 150;
+firemit.bounce.setTo(0.5, 0.5);
+firemit.angularDrag = 30;
+
+firemit.start(false, 6000, 100);
+
 }
 
 function render () {
