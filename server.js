@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(serv1er);
 
 const port = process.env.PORT || 3000;
 
@@ -79,7 +79,17 @@ io.on('connection', socket => {
 
     socket.emit('score', score);
 	  socket.broadcast.emit('score', score);
-    console.log("score " + data);
+
+    if(score[0] >= 77)
+    {
+      socket.emit('end', [1, score[0], score[1]]);
+      socket.broadcast.emit('end', [1, score[0], score[1]]);
+    }
+    else if(score[1] >= 77)
+    {
+      socket.emit('end', [2, score[1], score[0]]);
+      socket.broadcast.emit('end', [2, score[1], score[0]]);
+    }
   });
   socket.on('click', function(data){
     players[0].socket.emit('click', data);
