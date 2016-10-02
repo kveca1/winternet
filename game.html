@@ -53,6 +53,17 @@ function create() {
   socket = io();
   socket.emit('addPlayer', localStorage.getItem('username'));
 
+  ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
+  game.physics.arcade.enable(ball);
+
+  socket.on('isHost', function(data)
+	{
+		isHost = data;
+    ball.body.collideWorldBounds = data; //sets world border and gravity
+    if(data) ball.body.gravity.y = 500;
+	});
+
+
 	button = false;
 	score1 = 0;
 	score2 = 0;
@@ -60,9 +71,6 @@ function create() {
   max = Math.floor(11);
   maxscore= Math.floor(Math.random() * (max - min + 1)) + min;
   maxscore *= 7;
-
-    ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
-    game.physics.arcade.enable(ball);
 
     ball.x = (GAME_WIDTH - ball.width)  * .5; // sets ball to the middle
     ball.body.velocity.y = -200;
@@ -72,9 +80,6 @@ function create() {
     name1board = game.add.text(game.world.leftX, 50, name1, { font: "48px Arial", fill: "#ffffff", align: "left" });
     name2board = game.add.text(GAME_WIDTH, 112, name2, { font: "48px Arial", fill: "#ffffff", align: "right" });
     name2board.anchor.set(1);
-
-    ball.body.collideWorldBounds = true; //sets world border and gravity
-    ball.body.gravity.y = 500;
 
     platforms = game.add.physicsGroup();
 
@@ -106,10 +111,6 @@ function create() {
 
 
     platforms.setAll('body.immovable', true);
-	socket.on('isHost', function(data)
-	{
-		isHost = data;
-	});
 	socket.on('ballSet', function(data)
 	{
     ball.x = data.x;
@@ -174,8 +175,7 @@ function update () {
 	if(goal1.contains(ball.x, ball.centerY))
 	{
 		socket.emit('score',2);
-		score2+=7;ball.body.x = data.x;
-		ball.body.y = data.y;
+		score2+=7;
 		ball.x = (GAME_WIDTH - ball.width)  * .5;
 		ball.y = 200;
 		ball.body.velocity.x = 0;
