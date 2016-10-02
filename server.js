@@ -82,7 +82,6 @@ io.on('connection', socket => {
     console.log("score " + data);
   });
   socket.on('click', function(data){
-    players[0].socket.emit(data);
     players[0].socket.emit('click', data);
     console.log("Click X: " + data[0] + " Y: " + data[1]);
   });
