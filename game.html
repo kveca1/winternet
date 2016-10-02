@@ -22,6 +22,7 @@ function preload() {
     game.load.image('ball', 'https://cdn2.iconfinder.com/data/icons/iconslandsport/PNG/48x48/Football_Ball.png');
     game.load.image('platform', 'sprites/platform.png');
 
+    game.load.audio('go vols', ['rockytop.mp3']);
 }
 
 var ball;
@@ -48,6 +49,8 @@ var finaltext;
 var maxscore;
 var isHost = false;
 
+var music;
+
 function create() {
 
   socket = io();
@@ -72,6 +75,14 @@ function create() {
   maxscore= Math.floor(Math.random() * (max - min + 1)) + min;
   maxscore *= 7;
 
+<<<<<<< Updated upstream
+=======
+  //music = game.sound.play('rocky top');
+
+    ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
+    game.physics.arcade.enable(ball);
+
+>>>>>>> Stashed changes
     ball.x = (GAME_WIDTH - ball.width)  * .5; // sets ball to the middle
     ball.body.velocity.y = -200;
 
@@ -208,26 +219,33 @@ function endscreen(winner, winscore, losescore){
   finaltext = game.add.text(game.world.centerX, 150, "Congrats, " + winner + "!\nFinal Score: " + winscore + " - " + losescore, { font: "65px Arial", fill: "#ffffff", align: "center" }); //creates scoreboard
   finaltext.anchor.set(0.5);
   //endtext.text = "Congrats, " + winner + "!\nFinal Score: " + winscore + " - " + losescore;
+  music = game.sound.play('rocky top');
 }
 
 function render () {
-game.debug.geom(net,'#ffff00');
-game.debug.geom(goal1, "#ffffff");
-game.debug.geom(goal2, "#ffffff");
+  game.debug.geom(net,'#ffff00');
+  game.debug.geom(goal1, "#ffffff");
+  game.debug.geom(goal2, "#ffffff");
 
-game.debug.geom(orange0, "#ffa500");
-game.debug.geom(orange1, "#ffa500");
-game.debug.geom(orange2, "#ffa500");
-game.debug.geom(orange3, "#ffa500");
-game.debug.geom(orange4, "#ffa500");
-game.debug.geom(orange5, "#ffa500");
-game.debug.geom(orange6, "#ffa500");
-game.debug.geom(orange7, "#ffa500");
-game.debug.geom(orange8, "#ffa500");
-game.debug.geom(orange9, "#ffa500");
-game.debug.geom(orange10, "#ffa500");
-game.debug.geom(orange11, "#ffa500");
+  game.debug.geom(orange0, "#ffa500");
+  game.debug.geom(orange1, "#ffa500");
+  game.debug.geom(orange2, "#ffa500");
+  game.debug.geom(orange3, "#ffa500");
+  game.debug.geom(orange4, "#ffa500");
+  game.debug.geom(orange5, "#ffa500");
+  game.debug.geom(orange6, "#ffa500");
+  game.debug.geom(orange7, "#ffa500");
+  game.debug.geom(orange8, "#ffa500");
+  game.debug.geom(orange9, "#ffa500");
+  game.debug.geom(orange10, "#ffa500");
+  game.debug.geom(orange11, "#ffa500");
 
+  game.debug.soundInfo(music, 32, 32);
+
+  if (music.isDecoding)
+  {
+      game.debug.text("Decoding MP3 ...", 32, 200);
+  }
 }
 
 </script>
