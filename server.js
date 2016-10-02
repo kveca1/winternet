@@ -76,7 +76,7 @@ io.on('connection', socket => {
     else
       score[1] +=7;
 
-    socker.emit('score', score);
+    socket.emit('score', score);
 	  socket.broadcast.emit('score', score);
     console.log("score " + data)
   });
