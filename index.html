@@ -1,249 +1,41 @@
-<script type="text/javascript" src="node_modules/socket.io-client/socket.io.js"></script>
-<script type="text/javascript" src="./node_modules/phaser/build/phaser.min.js"></script>
+<h1>Login</h1>
+<span>Enter your username: <span>
+<input type="text" onsubmit="submit">
+
+<script src="jquery-3.1.1.js"></script>
 <script type="text/javascript">
-/**
- * Generated from the Phaser Sandbox
- *
- * http://phaser.io/sandbox/rpqQRssz
- *
- * This source requires Phaser 2.6.2
- */
-const GAME_WIDTH = 800;
-const GAME_HEIGHT = 600;
-var game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 
-function preload() {
-
-    game.stage.backgroundColor = '#000000';
-
-    game.load.baseURL = 'http://examples.phaser.io/assets/';
-    game.load.crossOrigin = 'anonymous';
-
-    game.load.image('ball', 'https://cdn2.iconfinder.com/data/icons/iconslandsport/PNG/48x48/Football_Ball.png');
-    game.load.image('platform', 'sprites/platform.png');
-
-}
-
-var ball;
-var platforms;
-var jumpButton;
-var net;
-var net2;
-var button;
-
-var goal1;
-var goal2;
-
-var score1;
-var score2;
-var scoreboard;
-var socket;
-
-var name1= "home";
-var name2= "away";
-var name1board;
-var name2board;
-
-var finaltext;
-var maxscore;
-var isHost;
-
-function create() {
-
-  socket = io();
-  socket.emit('addPlayer', localStorage.getItem('username'));
-
-	button = false;
-	score1 = 0;
-	score2 = 0;
-  min = Math.ceil(1);
-  max = Math.floor(11);
-  maxscore= Math.floor(Math.random() * (max - min + 1)) + min;
-  maxscore *= 7;
-
-    ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
-    game.physics.arcade.enable(ball);
-
-    ball.x = (GAME_WIDTH - ball.width)  * .5; // sets ball to the middle
-    ball.body.velocity.y = -200;
-
-    scoreboard = game.add.text(game.world.centerX, 50, score1 + " - " + score2, { font: "65px Arial", fill: "#ffffff", align: "center" }); //creates scoreboard
-    scoreboard.anchor.set(0.5);
-    name1board = game.add.text(game.world.leftX, 50, name1, { font: "48px Arial", fill: "#ffffff", align: "left" });
-    name2board = game.add.text(GAME_WIDTH, 112, name2, { font: "48px Arial", fill: "#ffffff", align: "right" });
-    name2board.anchor.set(1);
-
-    ball.body.collideWorldBounds = true; //sets world border and gravity
-    ball.body.gravity.y = 500;
-
-    platforms = game.add.physicsGroup();
-
-	goal1 = new Phaser.Rectangle(0, GAME_HEIGHT - 50, 150, 50);
-	goal2 = new Phaser.Rectangle(GAME_WIDTH - 150, GAME_HEIGHT - 50, 150, 50);
-
-
-    platforms.create(150, GAME_HEIGHT - 50, 'platform');
-
-    net2 = platforms.create(GAME_WIDTH *.5 - 5, GAME_HEIGHT *.5,'platform');
-    net2.width = 10;
-    net2.height = GAME_HEIGHT *.5 - 50;
-
-    net = new Phaser.Rectangle(GAME_WIDTH *.5 - 5, GAME_HEIGHT *.5, 10, GAME_HEIGHT *.5 - 50);
-
-    //Rectangles
-    orange0 = new Phaser.Rectangle(0,GAME_HEIGHT - 25, 25, 25);
-    orange1 = new Phaser.Rectangle(25,GAME_HEIGHT - 50, 25, 25);
-    orange2 = new Phaser.Rectangle(50,GAME_HEIGHT - 25, 25, 25);
-    orange3 = new Phaser.Rectangle(75,GAME_HEIGHT - 50, 25, 25);
-    orange4 = new Phaser.Rectangle(100,GAME_HEIGHT - 25, 25, 25);
-    orange5 = new Phaser.Rectangle(125,GAME_HEIGHT - 50, 25, 25);
-    orange6 = new Phaser.Rectangle(GAME_WIDTH - 150, GAME_HEIGHT - 25, 25, 25);
-    orange7 = new Phaser.Rectangle(GAME_WIDTH - 125, GAME_HEIGHT - 50,  25, 25);
-    orange8 = new Phaser.Rectangle(GAME_WIDTH -100, GAME_HEIGHT - 25,  25, 25);
-    orange9 = new Phaser.Rectangle( GAME_WIDTH -75, GAME_HEIGHT - 50, 25, 25);
-    orange10 = new Phaser.Rectangle(GAME_WIDTH - 50, GAME_HEIGHT - 25,  25 , 25);
-    orange11 = new Phaser.Rectangle(GAME_WIDTH - 25, GAME_HEIGHT - 50,  25, 25);
-
-
-    platforms.setAll('body.immovable', true);
-	socket.on('isHost', function()
-	{
-		isHost = true;
-	});   
-	socket.on('ballSet', function(data)
-	{
-		ball.body.x = data.x;
-		ball.body.y = data.y;
-	});
-
-    socket.on('score', function(data) 
-    {
-		if(data == 1) score1 += 7;
-		else score2 += 7;
- 	});
-  	
-    
-}
-
-var lastpos = {}
-
-function update () {
-
-	if(isHost)
-	{
-    //socket.emit('mouse move', game.input.position);
-    
-
-	game.physics.arcade.collide(ball, net2);
-    game.physics.arcade.collide(ball, platforms);
-    ball.body.velocity.x /= 1.05; /*frictional x movement*/
-
-	if(ball.body.position.x < 10) // pushes ball sprite from wall
-    {
-    	//socket.emit('ballChangeVX', 50);
-         ball.body.velocity.x += 50;
-    }
-    else if(ball.body.position.x > GAME_WIDTH - 10 - ball.width)
-    {
-    	//socket.emit('ballChangeVX', -50);
-         ball.body.velocity.x -= 50;
-    }
-
-	if(game.input.activePointer.isDown && !button) // Controls the movements of the Slime with respect to the cursor
-	{
-		button = true;
-    	if (Math.abs(game.input.position.x - ball.centerX) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && game.input.position.x > ball.centerX)
-    	{
-    		//socket.emit('ballChangeVX', -250);
-   		    ball.body.velocity.x += -250;
-   		}
-   		else if (Math.abs(ball.centerX - game.input.position.x ) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && ball.centerX > game.input.position.x)
-    	{
-    		//socket.emit('ballChangeVX', 250);
-        	ball.body.velocity.x += 250;
-    	}
-
-    	if (Math.abs(game.input.position.y - ball.centerY) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && game.input.position.y > ball.centerY)
-    	{
-    		//socket.emit('ballChangeVY', -250);
-			ball.body.velocity.y += -250;
-    	}
-    	else if (Math.abs(ball.centerY - game.input.position.y) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && ball.centerY > game.input.position.y)
-    	{
-    		//socket.emit('ballChangeVY', 250);
-			ball.body.velocity.y += 250;
-    	}
-
-	}
-	else if(game.input.activePointer.isUp)//ensures the ball must click a to interact and not hold down
-	{
-		button = false;
-	}
-
-	if(goal1.contains(ball.x, ball.centerY))
-	{
-		socket.emit('score2',score2 + 7);
-		score2+=7;
-		//socket.emit('ballSetX', (GAME_WIDTH - ball.width)  * .5);
-		ball.x = (GAME_WIDTH - ball.width)  * .5;
-		//socket.emit('ballSetY', 200);
-		ball.y = 200;
-		//socket.emit('ballSetVX', 0);
-		ball.body.velocity.x = 0;
-		//socket.emit('ballSetVY', -200);
-		ball.body.velocity.y = -200;
-		scoreboard.text = score1 + " - " + score2;
-    if(score2 == maxscore){
-      endscreen(name2, score2, score1);
-    }
-	}
-	else if(goal2.contains(ball.x, ball.centerY))
-	{
-		socket.emit('score1',score1 + 7);
-		score1+=7;
-		//socket.emit('ballSetX ', (GAME_WIDTH - ball.width)  * .5);
-		ball.x = (GAME_WIDTH - ball.width)  * .5;
-		//socket.emit('ballSetY', 200);
-		ball.y = 200;
-		//socket.emit('ballSetVX', 0);
-		ball.body.velocity.x = 0;
-		//socket.emit('ballSetVY', -200);
-		ball.body.velocity.y = -200;
-		scoreboard.text = score1 + " - " + score2;
-    if(score1==maxscore){
-      endscreen(name1, score1, score2);
-    }
-	}
-	
-		socket.emit('ballSet', ball.body);
-	}
-
-}
-
-function endscreen(winner, winscore, losescore){
-  finaltext = game.add.text(game.world.centerX, 150, "Congrats, " + winner + "!\nFinal Score: " + winscore + " - " + losescore, { font: "65px Arial", fill: "#ffffff", align: "center" }); //creates scoreboard
-  finaltext.anchor.set(0.5);
-  //endtext.text = "Congrats, " + winner + "!\nFinal Score: " + winscore + " - " + losescore;
-}
-
-function render () {
-game.debug.geom(net,'#ffff00');
-game.debug.geom(goal1, "#ffffff");
-game.debug.geom(goal2, "#ffffff");
-
-game.debug.geom(orange0, "#ffa500");
-game.debug.geom(orange1, "#ffa500");
-game.debug.geom(orange2, "#ffa500");
-game.debug.geom(orange3, "#ffa500");
-game.debug.geom(orange4, "#ffa500");
-game.debug.geom(orange5, "#ffa500");
-game.debug.geom(orange6, "#ffa500");
-game.debug.geom(orange7, "#ffa500");
-game.debug.geom(orange8, "#ffa500");
-game.debug.geom(orange9, "#ffa500");
-game.debug.geom(orange10, "#ffa500");
-game.debug.geom(orange11, "#ffa500");
-
-}
+$(document).keyup(function (e) {
+  if ($('input:focus') && (e.keyCode === 13)) {
+    console.log(e.target.value);
+    localStorage.setItem('username', e.target.value);
+    window.location = '/game.html';
+  }
+});
 
 </script>
+
+<style>
+body
+{
+  background-color: rgb(255,165,0);
+}
+span
+{
+  font-family: helvetica;
+  font-sixe: x-large;
+}
+h1
+{
+  font-family: helvetica;
+  font-size: xx-large;
+  align-items: center;
+}
+input
+{
+  font-family: helvetica;
+  font-size: large;
+  align-items: center;
+}
+
+</style>
