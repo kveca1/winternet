@@ -23,6 +23,8 @@ function preload() {
     game.load.image('platform', 'sprites/platform.png');
 
     game.load.audio('rocky top', 'https://raw.githubusercontent.com/kveca1/winternet/master/rockytop.mp3');
+
+    game.load.image('bullets', 'https://raw.githubusercontent.com/kveca1/winternet/master/BETTERFFA500.png', 6, 6);
 }
 
 var ball;
@@ -50,6 +52,7 @@ var maxscore;
 var isHost = false;
 
 var music;
+var emitter;
 
 function create() {
 
@@ -229,6 +232,21 @@ function endscreen(winner, winscore, losescore){
   finaltext.anchor.set(0.5);
   //endtext.text = "Congrats, " + winner + "!\nFinal Score: " + winscore + " - " + losescore;
   music = game.sound.play('rocky top');
+
+  emitter = game.add.emitter(game.world.centerX, game.world.centerY, 20);
+
+  emitter.makeParticles('bullets', [30000,30001,30002,30003,30004], 200, true, true);
+
+  emitter.minParticleSpeed.setTo(-200, -300);
+  emitter.maxParticleSpeed.setTo(200, -400);
+  emitter.minParticleScale = 0.25;
+  emitter.maxParticleScale = 1;
+  emitter.gravity = 150;
+  emitter.bounce.setTo(0.5, 0.5);
+  emitter.angularDrag = 30;
+
+  emitter.start(false, 6000, 100);
+
 }
 
 function render () {
