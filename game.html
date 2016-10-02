@@ -46,7 +46,8 @@ var name2board;
 
 var finaltext;
 var maxscore;
-var isHost;
+var isHost = false;
+var cacheBall = {};
 
 function create() {
 
@@ -106,14 +107,13 @@ function create() {
 
 
     platforms.setAll('body.immovable', true);
-	socket.on('isHost', function()
+	socket.on('isHost', function(data)
 	{
-		isHost = true;
+		isHost = data;
 	});
 	socket.on('ballSet', function(data)
 	{
-		ball.body.x = data.x;
-		ball.body.y = data.y;
+		cacheBall = data;
 	});
 
     socket.on('score', function(data)
@@ -150,7 +150,8 @@ function update () {
     }
 
 	if(game.input.activePointer.isDown && !button) // Controls the movements of the Slime with respect to the cursor
-	{
+	{ball.body.x = data.x;
+		ball.body.y = data.y;
 		button = true;
     	if (Math.abs(game.input.position.x - ball.centerX) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && game.input.position.x > ball.centerX)
     	{
@@ -183,7 +184,8 @@ function update () {
 	if(goal1.contains(ball.x, ball.centerY))
 	{
 		socket.emit('score',2);
-		score2+=7;
+		score2+=7;ball.body.x = data.x;
+		ball.body.y = data.y;
 		//socket.emit('ballSetX', (GAME_WIDTH - ball.width)  * .5);
 		ball.x = (GAME_WIDTH - ball.width)  * .5;
 		//socket.emit('ballSetY', 200);
@@ -217,6 +219,11 @@ function update () {
 
 		socket.emit('ballSet', ball.body);
 	}
+  else
+  {
+      ball.body.x = cacheBall.x;
+      ball.body.y = cacheBall.y;
+  }
 
 }
 
