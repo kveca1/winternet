@@ -77,9 +77,6 @@ function create() {
 
   //music = game.sound.play('rocky top');
 
-    ball = game.add.sprite(0 , 200, 'ball');//adds ball to the game
-    game.physics.arcade.enable(ball);
-
     ball.x = (GAME_WIDTH - ball.width)  * .5; // sets ball to the middle
     ball.body.velocity.y = -200;
 
