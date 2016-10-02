@@ -59,7 +59,7 @@ io.on('connection', socket => {
       {
         console.log("Player " + players[0].name + " is leaving");
         for(var i = 0; i < players.length; i++)
-        if(player[i].socket == socket)
+        if(players[i].socket === socket)
             players.splice(i,1);
         }
     }
