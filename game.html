@@ -47,7 +47,6 @@ var name2board;
 var finaltext;
 var maxscore;
 var isHost = false;
-var cacheBall = {};
 
 function create() {
 
@@ -113,7 +112,7 @@ function create() {
 	});
 	socket.on('ballSet', function(data)
 	{
-		cacheBall = data;
+		ball = data;
 	});
 
     socket.on('score', function(data)
@@ -131,21 +130,16 @@ function update () {
 
 	if(isHost)
 	{
-    //socket.emit('mouse move', game.input.position);
-
-
 	game.physics.arcade.collide(ball, net2);
     game.physics.arcade.collide(ball, platforms);
     ball.body.velocity.x /= 1.05; /*frictional x movement*/
 
 	if(ball.body.position.x < 10) // pushes ball sprite from wall
     {
-    	//socket.emit('ballChangeVX', 50);
          ball.body.velocity.x += 50;
     }
     else if(ball.body.position.x > GAME_WIDTH - 10 - ball.width)
     {
-    	//socket.emit('ballChangeVX', -50);
          ball.body.velocity.x -= 50;
     }
 
@@ -155,24 +149,20 @@ function update () {
 		button = true;
     	if (Math.abs(game.input.position.x - ball.centerX) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && game.input.position.x > ball.centerX)
     	{
-    		//socket.emit('ballChangeVX', -250);
    		    ball.body.velocity.x += -250;
    		}
    		else if (Math.abs(ball.centerX - game.input.position.x ) <= 100 && Math.abs(ball.centerY - game.input.position.y) <= 100 && ball.centerX > game.input.position.x)
     	{
-    		//socket.emit('ballChangeVX', 250);
         	ball.body.velocity.x += 250;
     	}
 
     	if (Math.abs(game.input.position.y - ball.centerY) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && game.input.position.y > ball.centerY)
     	{
-    		//socket.emit('ballChangeVY', -250);
-			ball.body.velocity.y += -250;
+  			ball.body.velocity.y += -250;
     	}
     	else if (Math.abs(ball.centerY - game.input.position.y) <= 100 && Math.abs(ball.centerX - game.input.position.x) <= 100 && ball.centerY > game.input.position.y)
     	{
-    		//socket.emit('ballChangeVY', 250);
-			ball.body.velocity.y += 250;
+  			ball.body.velocity.y += 250;
     	}
 
 	}
@@ -183,16 +173,12 @@ function update () {
 
 	if(goal1.contains(ball.x, ball.centerY))
 	{
-		socket.emit('score',2);
+		socket.broadcast.emit('score',2);
 		score2+=7;ball.body.x = data.x;
 		ball.body.y = data.y;
-		//socket.emit('ballSetX', (GAME_WIDTH - ball.width)  * .5);
 		ball.x = (GAME_WIDTH - ball.width)  * .5;
-		//socket.emit('ballSetY', 200);
 		ball.y = 200;
-		//socket.emit('ballSetVX', 0);
 		ball.body.velocity.x = 0;
-		//socket.emit('ballSetVY', -200);
 		ball.body.velocity.y = -200;
 		scoreboard.text = score1 + " - " + score2;
     if(score2 == maxscore){
@@ -201,15 +187,11 @@ function update () {
 	}
 	else if(goal2.contains(ball.x, ball.centerY))
 	{
-		socket.emit('score',1);
+		socket.broadcast.emit('score',1);
 		score1+=7;
-		//socket.emit('ballSetX ', (GAME_WIDTH - ball.width)  * .5);
 		ball.x = (GAME_WIDTH - ball.width)  * .5;
-		//socket.emit('ballSetY', 200);
 		ball.y = 200;
-		//socket.emit('ballSetVX', 0);
 		ball.body.velocity.x = 0;
-		//socket.emit('ballSetVY', -200);
 		ball.body.velocity.y = -200;
 		scoreboard.text = score1 + " - " + score2;
     if(score1==maxscore){
@@ -217,13 +199,8 @@ function update () {
     }
 	}
 
-		socket.emit('ballSet', ball.body);
+		socket.broadcast.emit('ballSet', ball);
 	}
-  else
-  {
-      ball.body.x = cacheBall.x;
-      ball.body.y = cacheBall.y;
-  }
 
 }
 
