@@ -15,7 +15,7 @@ let players = 0;
 
 io.on('connection', socket => {
   socket.on('mouse move', (data) => {
-    console.log(data);
+   // console.log(data);
   });
   socket.on('connected', () => {
     console.log('connected');
