@@ -22,10 +22,17 @@ io.on('connection', socket => {
 	if(players.length == 0)
 	{
 		host = data;
-		socket.emit('isHost');
-    console.log("addPlayer " + data);
-	}
-	playersA.push(data);
+    socket.emit('isHost', true);
+    console.log("isHost = true");
+  }
+  else
+  {
+    console.log("isHost = false");
+    socket.emit('isHost', false);
+  }
+
+  players.push(data);
+  console.log("addPlayer " + data);
   });
   socket.on('connected', () => {
     console.log('connected');
